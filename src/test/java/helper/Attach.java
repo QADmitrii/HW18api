@@ -5,6 +5,7 @@ import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -18,11 +19,11 @@ import static org.openqa.selenium.logging.LogType.BROWSER;
 
 public class Attach {
     @Attachment(value = "{attachName}", type = "image/png")
-    public static byte[] screenshotAs(String attachName) {
+    public static byte[] screenshotsAs(String attachName) {
         return ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
-    @Attachment(value = "Page source", type = "text/plain")
+    @Attachment(value = "PageSource", type = "text/plain")
     public static byte[] pageSource() {
         return getWebDriver().getPageSource().getBytes(StandardCharsets.UTF_8);
     }
@@ -34,11 +35,10 @@ public class Attach {
 
     public static void browserConsoleLogs() {
         attachAsText(
-                "Browser console logs",
-                String.join("\n", Selenide.getWebDriverLogs(BROWSER))
+                "Browser console loqs",
+                String.join("\n", Selenide.getWebDriverLogs(LogType.BROWSER))
         );
     }
-
 
     @Attachment(value = "Video", type = "text/html", fileExtension = ".html")
     public static String addVideo() {
@@ -51,13 +51,13 @@ public class Attach {
         String videoUrl = "https://selenoid.autotests.cloud/video/" + getSessionId() + ".mp4";
 
         try {
-
             return new URL(videoUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     public static String getSessionId() {
         return ((RemoteWebDriver) getWebDriver()).getSessionId().toString();
