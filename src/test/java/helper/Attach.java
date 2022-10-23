@@ -16,22 +16,14 @@ import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static io.qameta.allure.Allure.attachment;
 import static org.openqa.selenium.logging.LogType.BROWSER;
 
-public class Attachments {
-
-    @Step("Сделать скрин")
-    @Attachment(value = "Screenshot name", type = "image/png", fileExtension = "png")
-    public static byte[] takeScreenshot() {
+public class Attach {
+    @Attachment(value = "{attachName}", type = "image/png")
+    public static byte[] screenshotAs(String attachName) {
         return ((TakesScreenshot) getWebDriver()).getScreenshotAs(OutputType.BYTES);
     }
 
-    @Step("Добавить исходник страницы (в тексте и без аннотации)")
-    public static void addSource() {
-        attachment("Source", webdriver().driver().source());
-    }
-
-    @Step("Добавить исходник страницы (как html страницу и с аннотацией)")
-    @Attachment(value = "Source name", type = "text/html")
-    public static byte[] addHTMLSource() {
+    @Attachment(value = "Page source", type = "text/plain")
+    public static byte[] pageSource() {
         return getWebDriver().getPageSource().getBytes(StandardCharsets.UTF_8);
     }
 
@@ -40,15 +32,14 @@ public class Attachments {
         return message;
     }
 
-    @Step("Добавить логи консоли браузера")
-    public static void addBrowserConsoleLog() {
+    public static void browserConsoleLogs() {
         attachAsText(
-                "Логи консоли браузера",
+                "Browser console logs",
                 String.join("\n", Selenide.getWebDriverLogs(BROWSER))
         );
     }
 
-    @Step("Добавить видео")
+
     @Attachment(value = "Video", type = "text/html", fileExtension = ".html")
     public static String addVideo() {
         return "<html><body><video width='100%' height='100%' controls autoplay><source src='"
@@ -60,6 +51,7 @@ public class Attachments {
         String videoUrl = "https://selenoid.autotests.cloud/video/" + getSessionId() + ".mp4";
 
         try {
+
             return new URL(videoUrl);
         } catch (MalformedURLException e) {
             e.printStackTrace();
