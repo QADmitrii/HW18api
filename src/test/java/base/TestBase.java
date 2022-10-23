@@ -17,8 +17,12 @@ public class TestBase {
         SelenideLogger.addListener("allure", new AllureSelenide());
 
         DesiredCapabilities capabilities = new DesiredCapabilities();
-        capabilities.setCapability("enableVNC", true);
-        capabilities.setCapability("enableVideo", true);
+
+        if (System.getProperty("selenide.remote") != null) {
+            Configuration.remote = System.getProperty("selenide.remote");
+            capabilities.setCapability("enableVNC", true);
+            capabilities.setCapability("enableVideo", true);
+        }
         Configuration.browserCapabilities = capabilities;
 
         ConfigProvider config = new ConfigProvider();
@@ -27,10 +31,14 @@ public class TestBase {
     }
 
     @AfterEach
-    void getAttachments() {
+    void addAttachments() {
         Attach.screenshotsAs("Last screenshot");
         Attach.pageSource();
-        Attach.browserConsoleLogs();
-        Attach.addVideo();
+        if (Configuration.browser.equals("chrome")) {
+            Attach.browserConsoleLogs();
+        }
+        if (System.getProperty("selenide.remote") != null) {
+            Attach.addVideo();
+        }
     }
 }
