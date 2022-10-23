@@ -22,11 +22,11 @@ public interface Config extends org.aeonbits.owner.Config {
     String getBrowserPosition();
 
     @Key("baseUrl")
-    @DefaultValue("https://demowebshop.tricentis.com/")
+    @DefaultValue("https://demowebshop.tricentis.com")
     String getBaseUrl();
 
     @Key("baseURI")
-    @DefaultValue("https://demowebshop.tricentis.com/")
+    @DefaultValue("https://demowebshop.tricentis.com")
     String getBaseURI();
 
     @Key("remoteUrl")
